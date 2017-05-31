@@ -1,0 +1,29 @@
+{
+  "name": "fcc_vote",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gy134340/fcc_vote.git"
+  },
+  "author": "gy134340",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gy134340/fcc_vote/issues"
+  },
+  "homepage": "https://github.com/gy134340/fcc_vote#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "express-session": "^1.15.3",
+    "moment": "^2.18.1",
+    "mongoose": "^4.10.4",
+    "multer": "^1.3.0",
+    "serve-favicon": "^2.4.3"
+  }
+}
