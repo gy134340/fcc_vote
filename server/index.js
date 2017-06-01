@@ -6,24 +6,22 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var config = require('./config');
+var config = require('./config/index');
 
 var app = express();
-app.use(express.static(__dirname + '../client'));
+mongoose.connect(config.mongodb);
+mongoose.connection.on('error', function(err) {
+	console.error('mongodb connection error:' + err);
+	process.exit(1);
+});
+
+require('./config/express')(app);
+
+// routes
+require('./routes')(app);
 
 
-/**
- * 路由
- */
-
-// 未登录只能投别人的票，登录后可以管理自己的票
-var homeRouter = require('./routes/home');		// all polls cate  进入投票
-
-app.use('/', homeRouter);
-
-// var pollRouter = require('./routes/poll');		// add polls
-// app.use('/polls', pollRouter)
 
 app.listen(config.port, function() {
-	console.log('the server is ruuning at', config.port);
+	console.log('the server is ruuning at:' + config.port);
 });

@@ -7,13 +7,14 @@ var auth = require('../../auth');
 var controller = require('./home.controller');
 var model = require('./home.model');
 
+var checkLogin = auth.checkLogin;
+
 // @todo
-router.get('/', auth.hasRole('admin'), controller.index);
-router.delete('/:id', auth.hasRole('admin'), controller.destroy);
-router.get('/me', auth.isAuthenticated(), controller.me);
-router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
-router.put('/:id/:city/:state', auth.isAuthenticated(), controller.update);
-router.get('/:id', auth.isAuthenticated(), controller.show);
-router.post('/', controller.create);
+router.get('/', checkLogin, controller.index);
+router.delete('/:id', checkLogin, controller.destroy);
+router.get('/me', checkLogin, controller.me);
+router.put('/:id/password', checkLogin, controller.changePassword);
+router.put('/:id/:city/:state', checkLogin, controller.update);
+router.get('/:id', checkLogin, controller.show);
 
 module.exports = router;
