@@ -3,8 +3,6 @@ var mongoose = require('mongoose');
 var path = require('path');
 
 var favicon = require('serve-favicon');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 
 var config = require('./config/index');
 
@@ -17,11 +15,12 @@ mongoose.connection.on('error', function(err) {
 
 require('./config/express')(app);
 
+// app.use(express.static( '../client'));
 // routes
 require('./routes')(app);
 
 
 
 app.listen(config.port, function() {
-	console.log('the server is ruuning at:' + config.port);
+	console.log('the server is running at:' + config.port);
 });

@@ -2,9 +2,58 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>vote</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-<h1>test static</h1>	
+<div class="container" id="app">
+	<header>
+		<nav class="navbar">
+			<a href="/home">Home</a>
+			<a href="/myvote">My Vote</a>
+			<a href="/new vote">New Vote</a>
+			<a href="/user">gy134340</a>
+		</nav>
+
+		<nav class="navbar navbar"></nav>
+		<div class="signin">
+			<input type="button" value="Sign in with Github" >
+		</div>
+		
+	</header>
+	<h1 class="app_title">Vote</h1>
+	<div class="chart">
+		<div class="chart_title">
+			title: {{obj.name}}
+		</div>
+		<div class="wrap_select">
+			<form action="">
+				<h4>请选择</h4>
+				<select name="select" id="select">
+					<option value="" disabled="disabled" selected="selected" hidden="">Choose an option</option>
+					<option v-bind:value="option._id" v-for="option in obj.option">{{option.name}}</option>
+				</select>
+				<br>
+				<input type="button" value="Submit" id="submit" @click="updateVote">
+			</form>
+		</div>
+		<div class="wrap">
+			<canvas id="myChart" width="300" height="300"></canvas>
+		</div>
+	</div>
+</div>	
 </body>
+<script src="js/lib/vue.js"></script>
+<script src="js/lib/vue-router.min.js"></script>
+<!-- <script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script> -->
+<script src="js/lib/jquery-1.11.1.min.js"></script>
+<script src="js/lib/axios.min.js"></script>
+<!-- <script src="js/lib/semantic.min.js"></script> -->
+
+<script src="js/lib/vuex.js"></script>
+<script src="js/lib/chart.min.js"></script>
+<script src="js/index.js"></script>
 </html>

@@ -2,12 +2,12 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+mongoose.Promise = global.Promise;
 
 var VoteSchema = new Schema({
 	name: String,
 	owner: String,
 	option: [{
-		id: Number,
 		name: String,
 		votes: Number
 	}],
