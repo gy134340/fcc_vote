@@ -32,6 +32,7 @@ module.exports = {
 	},
 	update: function(req, res) {
 		var id = req.params.id;
+		var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 		// console.log('id', req.params.id);
 		Vote.findById(id, function(err, doc) {
 			if (err) {
@@ -39,8 +40,15 @@ module.exports = {
 				return;
 			}
 			// res.json(doc);
-			// console.log('doc', doc);
+			console.log('doc', doc);
 			var sub = doc.option.id(req.body.sub_id);
+			var voters = doc.voters;
+			if (voters.indexOf(ip) > -1) {
+				res.send('ipExists');
+				return;
+			} else {
+				voters.push(ip);
+			}
 			sub.votes++;
 			doc.save(function(err, dd) {
 				if (err) {
