@@ -57,8 +57,8 @@ var app = new Vue({
 				var r = parseInt(Math.random() * 255);
 				var g = parseInt(Math.random() * 255);
 				var b = parseInt(Math.random() * 255);
-				bgColor.push('rgba(' + r + ',' + g + ','+ b +','+ 0.2+')');
-				bdColor.push('rgba(' + r + ',' + g + ','+ b +','+ 1+')');
+				bgColor.push('rgba(' + 128 + ',' + g + ','+ b +','+ 0.2+')');
+				bdColor.push('rgba(' + 128 + ',' + g + ','+ b +','+ 1+')');
 			});
 			var ctx = document.getElementById('myChart');
 			var myChart = new Chart(ctx, {
@@ -127,6 +127,10 @@ var app = new Vue({
 			}).catch(function(err) {
 				console.log('create err:' + err);
 			});
+		},
+		login: function(){
+			var url = 'https://github.com/login/oauth/authorize?client_id=4e76781521758dd671ec&state=login&redirect_uri=http://127.0.0.1:8080/auth/github';
+			window.location.href = url;
 		}
 	}
 });

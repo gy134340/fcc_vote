@@ -2,7 +2,7 @@
 
 var express = require('express');
 var controller = require('./vote.controller');
-var auth = require('../../auth');
+var auth = require('../../auth/auth');
 
 var Router = express.Router();
 

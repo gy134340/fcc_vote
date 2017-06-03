@@ -8,6 +8,8 @@ module.exports = function(app) {
   // app.use('/auth', require('./auth'));
   
   var voteRouter = require('./routes/vote');   // add vote
+  var authRouter = require('./auth');
+  app.use('/auth', authRouter);
   app.use('/', voteRouter);
   
   
