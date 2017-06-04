@@ -14,14 +14,13 @@
 			<a href="/home">Home</a>
 			<a href="/myvote">My Vote</a>
 			<a href="/new vote">New Vote</a>
-			<a href="/user">gy134340</a>
-			<a href="javascript:void(0);" @click="login">Github 登录</a>
-		</nav>
+			<h3 href="javascript:void(0);" v-if="user.isAuth">已登录{{user.username}}</h3>
+			<h3 v-else>请登录</h3>
+			<h3 @click="loginOut">登出</h3>
 
-		<nav class="navbar navbar"></nav>
-		<div class="signin">
-			<input type="button" value="Sign in with Github" >
-		</div>
+			<a href="javascript:void(0);" @click="login">Github 登录</a>
+
+		</nav>
 		
 	</header>
 	<h1 class="app_title">Vote</h1>

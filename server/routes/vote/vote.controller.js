@@ -2,8 +2,33 @@ var _ = require('lodash');
 var Vote = require('./vote.model');
 
 module.exports = {
+	auth: function(req, res) {
+		var obj = {};
+		if (req.session.username) {
+			obj = {
+				isAuth: true,
+				username: req.session.username,
+				avatar: req.session.avatar
+			};
+			res.json(obj);
+		} else {
+			obj = {
+				isAuth: false,
+			};
+			res.json(obj);
+		}
+	},
+	loginout: function(req, res) {
+		req.session.destroy(function(err) {
+			var obj;
+			obj = {
+				isAuth: false,
+			};
+			res.json(obj);
+		});	
+	},
 	index: function(req, res) {		// for all
-		res.end('fuck');
+		
 	},
 	show: function(req, res) {		// for single
 		var id = req.params.id;

@@ -6,6 +6,10 @@ var auth = require('../../auth/auth');
 
 var Router = express.Router();
 
+Router.post('/login', controller.auth);
+
+Router.post('/loginout', controller.loginout);
+
 Router.get('/', controller.index);		// show all
 
 Router.get('/:id', controller.show);

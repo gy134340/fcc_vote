@@ -6,7 +6,8 @@ var app = new Vue({
 			owner: '',
 			option: [],
 			active: true
-		}
+		},
+		user: ''
 	},
 	computed: {
 
@@ -16,14 +17,31 @@ var app = new Vue({
 		// console.log('test');
 	},
 	mounted: function() {
-		// this.enableChart(this.obj)
-		// .then(function() {
-
-		// });
-		// this.insertData();
+		var that = this;
+		this.getAuth().then(function(dt) {
+			that.user = dt;
+			console.log(that.user);
+		});
 	},
 	methods: {
-		process: function() {
+		getAuth: function() {
+			return new Promise(function(resolve, reject) {
+				axios.post('/login').then(function(dt) {
+					// console.log('isauth', dt.data);
+					resolve(dt.data);
+				});
+			});
+		},
+		loginOut: function() {
+			var that = this;
+			// return new Promise(function(resolve, reject) {
+				axios.post('/loginout').then(function(dt) {
+					// console.log('isauth', dt.data);
+					that.user = dt.data;
+				});
+			// });
+		},
+ 		process: function() {
 			var that = this;
 			this.getData()
 				.then(function() {
@@ -131,6 +149,20 @@ var app = new Vue({
 		login: function(){
 			var url = 'https://github.com/login/oauth/authorize?client_id=4e76781521758dd671ec&state=login&redirect_uri=http://127.0.0.1:8080/auth/github';
 			window.location.href = url;
+			// var data = new FormData();
+			// data.append('client_id', '4e76781521758dd671ec');
+			// data.append('state', 'login');
+			// data.append('redirect_uri', 'http://127.0.0.1:8080/auth/github');
+			// axios.get('https://github.com/login/oauth/authorize', data).then(function(dt) {
+			// 	console.log('test', dt.data);
+			// });
 		}
 	}
 });
+
+
+
+
+
+
+
