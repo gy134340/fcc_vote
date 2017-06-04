@@ -13,11 +13,11 @@ module.exports = function(app) {
 
 	// for session
 	app.use(session({
-		secret: 'gy134340',
+		secret: 'gy',
 		cookie: { 
 			path: '/',
-			httpOnly: false,
-			maxAge: 1000 * 60 * 60
+			httpOnly: true,
+			maxAge: 1000 * 60 * 60 * 24
 		},
 		resave: false,
   		saveUninitialized: true

@@ -43,15 +43,17 @@ Router.get('/', function(req, res) {
       request(info_option, function(err, response, body){
          if(err){
              res.send(err);
+             return;
          }
          var obj = JSON.parse(body);
          // res.send(obj.login);
+         // console.log('token', obj);
          req.session.username = obj.login;
          req.session.avatar = obj.avatar_url;
          // console.log(req.session.username);
          // res.send(req.session.username);
          // res.send(req.session.avatar);
-         res.redirect('back');
+         res.redirect('/');
       });
   });
 });

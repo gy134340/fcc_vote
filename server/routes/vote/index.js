@@ -10,7 +10,7 @@ Router.post('/login', controller.auth);
 
 Router.post('/loginout', controller.loginout);
 
-Router.get('/', controller.index);		// show all
+Router.get('/votelist*', controller.index);		// show all
 
 Router.get('/:id', controller.show);
 
@@ -20,7 +20,7 @@ Router.delete('/:id', auth.isAuthenticated(), controller.delete);
 
 Router.put('/:id', auth.isAuthenticated(), controller.update);	// 全改
 
-Router.patch('/:id', auth.isAuthenticated(), controller.update);	// 改部分
+Router.patch('/:id', controller.update);	// 改部分
 
 module.exports = Router;
 

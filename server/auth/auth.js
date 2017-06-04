@@ -19,12 +19,13 @@ var check = {
 		
 		// app.use req, res, next
 		return function(req, res, next) {
-			if (req.session.username) {
-				return res.redirect('/');
-				
-			} else {
-				return res.redirect('signin');
-			}
+			// if (req.session.username) {
+			// 	// return res.redirect('/');
+			// 	next();
+			// } else {
+			// 	// return res.redirect('signin');
+			// 	return false;
+			// }
 			next();
 		}
 	}

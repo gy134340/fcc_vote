@@ -28,21 +28,40 @@ module.exports = {
 		});	
 	},
 	index: function(req, res) {		// for all
+		if (req.query.username) {
+			var username = req.query.username;
+			Vote.find({'owner': username}, function(err, doc) {
+				if (err) {
+					console.log('list err', err);
+					return;
+				}
+				res.json(doc);
+			});
+		} else {
+			Vote.find({}, function(err, doc) {
+				if (err) {
+					console.log('list err', err);
+					return;
+				}
+				res.json(doc);
+			});
+		}
 		
 	},
 	show: function(req, res) {		// for single
 		var id = req.params.id;
+		console.log('id',id);
 		Vote.findById(id, function(err, doc) {
 			if (err) {
-				console.log('update err');
+				console.log('show err haha');
 				return;
-			}
+			} 
+			// console.log('1', doc);
 			res.json(doc);
-		})
+		});
 	},
 	create: function(req, res) {
 		var chart = new Vote(req.body);
-
 		chart.save(function(err, doc) {
 			if (err) {
 				console.log('create err');
@@ -53,6 +72,17 @@ module.exports = {
 		});
 	},
 	delete: function(req, res) {
+		var id = req.params.id;
+		Vote.findByIdAndRemove(id, function(err){
+			if (err) {
+				console.log('delete error', err);
+				return;
+			}
+			var obj = {
+				delete: true
+			}
+			res.json(obj);
+		});
 
 	},
 	update: function(req, res) {

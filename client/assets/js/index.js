@@ -7,13 +7,20 @@ var app = new Vue({
 			option: [],
 			active: true
 		},
-		user: ''
+		user: {},
+		votes: [],
+		userVotes: [],
+		isCreate: false,
+		isUserVote: false,
+		tmp_id: '59325e05d30909cd9c9cacf1'
 	},
 	computed: {
 
 	},
 	created: function() {
-		this.process();
+		var id = this.tmp_id;
+		this.process(id);
+		this.getAll();
 		// console.log('test');
 	},
 	mounted: function() {
@@ -24,10 +31,16 @@ var app = new Vue({
 		});
 	},
 	methods: {
+		startCreate: function() {
+			this.isCreate = true;
+		},
+		endCreate: function() {
+			this.isCreate = false;
+		},
 		getAuth: function() {
 			return new Promise(function(resolve, reject) {
 				axios.post('/login').then(function(dt) {
-					// console.log('isauth', dt.data);
+					console.log('isauth', dt.data);
 					resolve(dt.data);
 				});
 			});
@@ -38,19 +51,42 @@ var app = new Vue({
 				axios.post('/loginout').then(function(dt) {
 					// console.log('isauth', dt.data);
 					that.user = dt.data;
+					alert('已登出');
 				});
 			// });
 		},
- 		process: function() {
+		getAll: function() {
 			var that = this;
-			this.getData()
-				.then(function() {
-					that.enableChart(that.obj);
-				});
+			axios.get('/votelist').then(function(dt) {
+				that.votes = dt.data;
+				console.log('votes', that.votes);
+			});
 		},
-		getData: function() {
-			// var id = '59325e05d30909cd9c9cacf1';
-			var id = '5932636cd30909cd9c9cacf4';
+		getUserAll: function() {
+			var that = this;
+			this.isUserVote = true;
+			var url = '/votelist?username=' + this.user.username;
+			axios.get(url).then(function(dt) {
+				that.userVotes = dt.data;
+				console.log('uservotes', dt.data);
+			});
+		},
+		closeUserVote: function() {
+			this.isUserVote = false;
+		},
+ 		process: function(id) {
+			var that = this;
+			this.tmp_id = id;
+			that.closeUserVote();
+			if (id) {
+				this.getData(id)
+					.then(function() {
+						that.enableChart(that.obj);
+					});
+			}	
+		},
+		getData: function(id) {
+			// var id = '5932636cd30909cd9c9cacf4';
 			var url = '/' + id;
 			var that = this;
 			return new Promise(function(resolve, reject) {
@@ -63,6 +99,7 @@ var app = new Vue({
 					reject()
 				});
 			});
+			
 		},
 		enableChart: function(obj) {
 			var label = [];
@@ -97,7 +134,7 @@ var app = new Vue({
 				}
 			});
 		},
-		updateVote: function() {
+		updateVote: function(id) {
 			var select = document.getElementById('select');
 			var value = select.options[select.selectedIndex].value;
 			var that = this;
@@ -105,10 +142,10 @@ var app = new Vue({
 			// put 全改，patch 改部分的
 			if (value) {
 				var obj = {
-					id: '59325e05d30909cd9c9cacf1',
+					id: id,
 					sub_id: value
 				};
-				var url = '/' + '5932636cd30909cd9c9cacf4';
+				var url = '/' + id;
 				axios.patch(url, obj).then(function(dt) {	
 					if (dt.data !== 'ipExists') {
 						that.obj = dt.data;
@@ -126,24 +163,57 @@ var app = new Vue({
 			}
 		},
 		createVote: function() {
-			var obj = {
-				name: 'boy or girl',
-				owner: 'gy',
-				option: [{
-					name: 'boy',
-					votes: 0
-				},
-				{
-					name: 'girl',
-					votes: 0
-				}],
-				voters:[111, 222 ],	// 每人只能选一次，ip judge
-				active: true,
+			var title = document.getElementById('create_name').value;
+			var options = document.getElementById('create_option').value;
+			document.getElementById('create_name').value = '';
+			document.getElementById('create_option').value = '';
+			// console.log(title.value);
+			if (title.length = 0) {
+				alert('请输入投票的标题');
+				return;
 			}
-			axios.post('/', obj).then(function(dt) {
-				console.log('create', dt);
+
+			if (options.length = 0) {
+				alert('请输入投票的选项');
+				return;
+			}
+			options = options.split('\n');
+
+			var option_obj = [];
+			options.map(function(value) {
+				option_obj.push({
+					name: value,
+					votes: 0
+				});
+			});
+			var that = this;
+			if (this.user.username) {
+				var obj = {
+					name: title,
+					owner: this.user.username,
+					option: option_obj,
+					voters:[],
+					active: true,
+				}
+				axios.post('/', obj).then(function(dt) {
+					console.log('create', dt);
+					that.endCreate();
+					that.getAll();
+				}).catch(function(err) {
+					console.log('create err:' + err);
+				});
+			}
+			
+		},
+		deleteVote: function(id) {
+			var url = '/' + id;
+			var that = this;
+			axios.delete(url).then(function(dt) {	
+				that.closeUserVote();
+				that.getAll();
+				console.log('delete', dt.data);		
 			}).catch(function(err) {
-				console.log('create err:' + err);
+				// console.log('create err:' + err);	
 			});
 		},
 		login: function(){

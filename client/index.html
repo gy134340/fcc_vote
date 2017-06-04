@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>vote</title>
+	<link rel="icon"  href="img/favicon.ico">
 	<link rel="stylesheet" href="css/reset.css">
 	<link rel="stylesheet" href="css/index.css">
 </head>
@@ -11,19 +12,60 @@
 <div class="container" id="app">
 	<header>
 		<nav class="navbar">
-			<a href="/home">Home</a>
-			<a href="/myvote">My Vote</a>
-			<a href="/new vote">New Vote</a>
-			<h3 href="javascript:void(0);" v-if="user.isAuth">已登录{{user.username}}</h3>
-			<h3 v-else>请登录</h3>
-			<h3 @click="loginOut">登出</h3>
-
-			<a href="javascript:void(0);" @click="login">Github 登录</a>
-
+			<div class="login" v-if="user && user.isAuth">
+				<h3 class="sub" @click="getUserAll">Your Vote</h3>
+				<h3 class="sub" @click="startCreate">Create</h3>
+				<h3 class="sub username">
+					{{user.username}}
+					<img :src="user.avatar" class="avatar" alt="">
+					<span @click="loginOut" class="sub loginout">登出</span>
+				</h3>
+			</div>
+			<div class="loginin login" v-else>
+				<h3 class="sub" @click="login">使用 Github 登录</h3>
+			</div>
 		</nav>
 		
 	</header>
 	<h1 class="app_title">Vote</h1>
+	<div class="votes">	
+		<h2>选择一个投票</h2>
+		<ul v-if="votes.length > 0">
+			<li v-for="vote in votes" v-bind:class="{ active: (vote._id === tmp_id)}" @click="process(vote._id)">
+				{{ vote.name }}
+			</li>
+		</ul>
+	</div>
+	<div class="create" v-if="isCreate">
+		<div class="create_wrap">
+			<div class="create_title">
+				<h3>创建一个投票</h3>
+			</div>
+			<div class="create_name">
+				<label for="create_name">标题</label>
+				<input type="text" placeholder="请输入名字" id="create_name">
+			</div>
+			<div class="create_textarea">
+				<label for="create_option">选项（每行输入一个,用换行符分隔）</label>
+				<textarea name="create_option" id="create_option" cols="30" rows="10"></textarea>
+			</div>
+			<input type="button" class="create_submit" value="提交" id="submit" @click="createVote">
+			<input type="button" value="取消" class="create_cancel" @click="endCreate">
+		</div>
+	</div>
+	<div class="user_vote" v-if="isUserVote">
+		<div class="user_vote_wrap">
+			<h2>你创建的投票</h2>
+			<ul v-if="userVotes.length > 0">
+				<li v-for="vote in userVotes" @click="process(vote._id)">
+					{{ vote.name }}
+					<span class="delete" @click.prevent.stop="deleteVote(vote._id)">删除</span>
+				</li>
+			</ul>
+
+			<input type="text" value="关闭" class="user_cancel" @click="closeUserVote">
+		</div>
+	</div>
 	<div class="chart">
 		<div class="chart_title">
 			Title: {{obj.name}}
@@ -36,7 +78,7 @@
 					<option v-bind:value="option._id" v-for="option in obj.option">{{option.name}}</option>
 				</select>
 				<br>
-				<input type="button" value="Submit" id="submit" @click="updateVote">
+				<input type="button" value="Submit" id="submit" @click="updateVote(tmp_id)">
 			</form>
 		</div>
 		<div class="wrap">
