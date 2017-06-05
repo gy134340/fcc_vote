@@ -12,14 +12,14 @@ var app = new Vue({
 		userVotes: [],
 		isCreate: false,
 		isUserVote: false,
-		tmp_id: '59325e05d30909cd9c9cacf1'
+		tmp_id: ''
 	},
 	computed: {
 
 	},
 	created: function() {
-		var id = this.tmp_id;
-		this.process(id);
+		// var id = this.tmp_id;
+		// this.process(id);
 		this.getAll();
 		// console.log('test');
 	},
@@ -59,6 +59,10 @@ var app = new Vue({
 			var that = this;
 			axios.get('/votelist').then(function(dt) {
 				that.votes = dt.data;
+				that.tmp_id = dt.data[0]._id;
+				that.obj = dt.data[0];
+				that.enableChart(that.obj);
+
 				console.log('votes', that.votes);
 			});
 		},
@@ -197,6 +201,7 @@ var app = new Vue({
 				}
 				axios.post('/', obj).then(function(dt) {
 					console.log('create', dt);
+					// that.tmp_id = dt.data._id;
 					that.endCreate();
 					that.getAll();
 				}).catch(function(err) {
